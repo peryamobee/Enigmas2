@@ -1,0 +1,12 @@
+#circles h1{
+    clear: left;
+    text-align: left;
+}
+.circle div{
+    margin: 0.2em 0.2em;
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    float: left;
+    position: relative;
+}

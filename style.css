@@ -1,0 +1,129 @@
+* {
+    box-sizing: border-box;
+}
+body{
+    text-align: center;
+    background-color: #1D4646;
+}
+#container{
+    overflow: hidden;
+    display: inline-block;
+    background-color: darkcyan;
+}
+#container  > div{
+
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    float: left;
+    position: relative;
+    transition: background-color 1100ms;
+
+}
+#container div:nth-child(10n + 1){
+    clear: left;
+}
+div.touch-counter{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: lightseagreen;
+}
+div.touched{
+    background-color: rgba(0,0,0,0.3) ;
+}
+div.marked{
+    background-color: crimson;
+}
+div.touched.marked{
+    background-color: #B32B45;
+}
+div.pre-next{
+    color: aliceblue;
+}
+div.next{
+    border-width:3px !important;
+    font-weight: bold;
+    font-size: 19px;
+}
+.marked div.touch-counter {
+    color: #7B6C6F ;
+}
+
+button{
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.stat{
+    position: fixed;
+    top:1em;
+    right: 1em;
+    color: aliceblue;
+    width: 10em;
+    border: 1px solid;
+    height: 10em;
+    text-align: left;
+    padding: 0.5em;
+    box-sizing: border-box;
+}
+/*******************
+        Is Mobile
+*******************/
+html{
+    height: 50%;
+}
+body{
+    height: 100%;
+}
+
+body.isMobile{
+    font-size: 28px;
+}
+
+.isMobile  #container{
+    width: 100%;
+    height: 100%;
+}
+.isMobile #container > div{
+    width: 10%;
+    height: 10%;
+}
+.isMobile .stat{
+    position: relative;
+    margin-top: 2em;
+    top:initial;
+    right: initial;
+    left: initial;
+    bottom: initial;
+    width: initial;
+    border: inherit;
+}
+
+.isMobile button{
+    width: 50%;
+    height: 4em;
+    font-weight: bold;
+    margin-top: 1em;
+    font-size: 30px;
+}

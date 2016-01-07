@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>switchs :)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+    <div id="container"></div>
+
+    <div style="clear: left; ">
+        <button onclick="next()">Next</button>
+        <div>
+            <span id="counter"></span>
+        </div>
+    </div>
+
+    <div class="stat">
+        <div>
+            next step: <span id="next-step"></span>
+        </div>
+    </div>
+
+
+    <script>
+        //        init
+        if( isMobile() ){
+            document.body.classList.add('isMobile');
+        }
+
+        var  $ = document.querySelector.bind(document);
+
+        var divs = [];
+        for( var i=0; i < 100; i++ ){
+            var div = document.createElement('div');
+            div.innerHTML = i+1 + '<div class="touch-counter"></div>';
+            div.tuched  = 0;
+            divs.push(div);
+            $('#container').appendChild(div);
+        }
+
+
+        function markCube(divider){
+            var cDiv = null;
+
+            divs[divider-1].classList.remove('next');
+
+            for( var i = divider-1; i<100; i+=divider ){
+                cDiv = divs[i];
+                cDiv.mark = !divs[i].mark;
+                cDiv.tuched += 1;
+
+                cDiv.querySelector('.touch-counter').innerText = cDiv.tuched;
+                cDiv.classList.remove('pre-next');
+                if(cDiv.mark){
+                    cDiv.classList.add('marked');
+                }else{
+                    cDiv.classList.remove('marked');
+                }
+            }
+        }
+        function preMarkCube(divider){
+            var cDiv = null;
+
+            divs[divider-1].classList.add('next');
+            for( var i = 2*divider-1; i<100; i+=divider ){
+                cDiv = divs[i];
+                cDiv.classList.add('pre-next');
+            }
+        }
+
+        step = 1;
+        $('#next-step').innerText = step;
+        preMarkCube(step);
+
+
+        function next(){
+            if(step >= 100) return;
+            divs[step-1].classList.add('touched');
+            markCube(step);
+            step++;
+            preMarkCube(step);
+            $('#next-step').innerText = step;
+
+        }
+
+
+        function isMobile() {
+            if( navigator.userAgent.match(/Android/i)
+                    || navigator.userAgent.match(/webOS/i)
+                    || navigator.userAgent.match(/iPhone/i)
+                    || navigator.userAgent.match(/iPad/i)
+                    || navigator.userAgent.match(/iPod/i)
+                    || navigator.userAgent.match(/BlackBerry/i)
+                    || navigator.userAgent.match(/Windows Phone/i)
+            ){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+    </script>
+</body>
+</html>
