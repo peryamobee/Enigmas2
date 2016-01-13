@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="enigma2.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg.js"></script>
     <style>
 
 
@@ -24,13 +25,14 @@
 
 
         window.addEventListener('load',function () {
+            createCubes();
             shuffle( $$('#container')[0] );
-            collection = $$('#container div');
+            collection = $$('#container .cube');
 
             state.findedNumber = (Math.random()* collection.length) | 0;
             renderState();
 
-            $('#container div').on('click', function () {
+            $('.cube').on('click', function () {
 //                markNext.call(this);
 //                state.step++;
 //                renderState();
@@ -46,24 +48,66 @@
 //            })
         });
 
+        function createCubes(){
+            var len = 100;
+            var cubes =[];
+            for (var i = 0; i < len; i++) {
+                cubes.push(
+                    $('<div class="cube show-front">\
+                        <figure class="front"></figure>\
+                        <figure class="back"></figure>\
+                        <figure class="right"></figure>\
+                        <figure class="left"></figure>\
+                        <figure class="top"></figure>\
+                        <figure class="bottom"></figure>\
+                        <span>'+(i+1)+'</span>\
+                    </div>')
+                )
+            }
+
+            $('#container').append(cubes);
+        }
 
 
         function circle(color, indexStart ){
             var index = indexStart;
             var $circle = $('<div class="circle">');
+            var path = [];
             while(true){
                 var node = collection[ index ];
 //                node.classList.add('marked');
                 node.classList.add('touched');
                 node.style.backgroundColor = color;
                 index = (node.innerText * 1) -1;
+                path.push( index );
                 $circle.append( node.cloneNode(true) );
                 if(index == indexStart){
                     break;
                 }
             }
-            $('.circles').append( '<h1>'+ $circle.children().length  +" steps</h1>" );
-            $('.circles').append( $circle );
+            $('#circles').append( '<h1>'+ $circle.children().length  +" steps</h1>" );
+            $('#circles').append( $circle );
+            const cubeSize = 50;
+            path = path
+                    .map(indexToCoordinate.bind(null,cubeSize))
+                    .join('')
+                    .replace('L','M');
+            Snap('#container + svg').path( path).attr({
+                stroke: color
+            });
+
+        }
+
+        function indexToCoordinate( cubeSize, index){
+            const lineLength = 10 ;
+            const d = cubeSize / 2;
+            var c = {
+                x: (index % lineLength) * cubeSize,
+                y: (index / lineLength | 0) * cubeSize
+            };
+
+            return  ['L',c.x + d, c.y + d].join(' ');
+
         }
 
         function markCircles(){
@@ -72,6 +116,7 @@
                     continue;
                 var color = randomColor();
                 circle(color,i);
+                break;
 
             }
         }
@@ -86,7 +131,6 @@
             }
             container.replaceChild(cubeOneSwape.cloneNode(true),cubeTwoSwape);
             container.replaceChild(cubeTwoSwape.cloneNode(true),cubeOneSwape);
-
 
         }
 
@@ -130,24 +174,12 @@
     </script>
 </head>
 <body>
-    <div id="container">
-        <div class="cube">
-            <div class="front">1</div>
-            <div class="back">2</div>
-            <div class="right">3</div>
-            <div class="left">4</div>
-            <div class="top">5</div>
-            <div class="bottom">6</div>
-        </div>
-        <div class="cube">
-            <div class="front">1</div>
-            <div class="back">2</div>
-            <div class="right">3</div>
-            <div class="left">4</div>
-            <div class="top">5</div>
-            <div class="bottom">6</div>
-        </div>
+    <div id="stage">
+        <div id="container"></div>
+        <svg></svg>
     </div>
+
+
 
     <div style="clear: left; ">
         <button onclick="markCircles()">Mark Circles</button>
