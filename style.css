@@ -1,34 +1,56 @@
 * {
     box-sizing: border-box;
 }
+
 body{
     text-align: center;
     background-color: #1D4646;
 }
+
 #container{
     overflow: hidden;
     display: inline-block;
     background-color: darkcyan;
 }
-#container > div{
 
+.cube{
     width: 50px;
     height: 50px;
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     float: left;
     position: relative;
     transition: background-color 1100ms;
-
 }
+
 #container div:nth-child(10n + 1){
     clear: left;
 }
+
 div.touch-counter{
     position: absolute;
     right: 0;
     bottom: 0;
     color: lightseagreen;
 }
+
+div.pre-next{
+    color: aliceblue;
+}
+
+div.next{
+    border-width:3px !important;
+    font-weight: bold;
+    font-size: 19px;
+}
+
+.marked div.touch-counter {
+    color: #7B6C6F ;
+}
+
+/**************
+    states
+***************/
+
 div.touched{
     background-color: rgba(0,0,0,0.3) ;
 }
@@ -38,18 +60,10 @@ div.marked{
 div.touched.marked{
     background-color: #B32B45;
 }
-div.pre-next{
-    color: aliceblue;
-}
-div.next{
-    border-width:3px !important;
-    font-weight: bold;
-    font-size: 19px;
-}
-.marked div.touch-counter {
-    color: #7B6C6F ;
-}
 
+/*******************
+    Elements
+********************/
 button{
     color: #333;
     background-color: #fff;

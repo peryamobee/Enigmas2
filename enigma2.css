@@ -1,18 +1,44 @@
+#stage{
+    display: inline-block;
+    position: relative;
+}
+
 #container{
     /*perspective: 500px;*/
-    width: 800px;
-    height: 500px;
+    /*width: 800px;*/
+    /*height: 500px;*/
 }
+#container + svg{
+    position: absolute;
+    top:0; left: 0;
+    bottom: 0; right: 0;
+    width: 100%;
+    height: 100%;
+}
+svg path{
+    /*stroke: #e14e5d;*/
+    stroke-width: 8px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: transparent;
+}
+
 #container .cube{
     counter-increment: position;
 }
-#container .cube:after{
+
+#container .cube .front:after{
     content: counter(position);
     display: inline-block;
     position: absolute;
     right: 0;
     bottom: 0;
-    color: lightseagreen;
+    color: #21f3eb;
+    line-height: 1em;
+}
+
+#container .cube .front{
+    background-color: transparent;
 }
 
 .color-A{
@@ -31,24 +57,38 @@
     margin: 0.2em 0.2em;
     width: 50px;
     height: 50px;
-    border: 1px solid black;
     float: left;
     position: relative;
 }
-.cube > div{
+
+.cube{
+    transition: background-color,transform 1s;
+    transform-style: preserve-3d;
+    color: white;
+    /*margin: 20px;*/
+    transform: rotateY( 31deg ) rotateX( 30deg );
+}
+.cube > span {
+    line-height: 50px;
+}
+.cube > figure{
     margin: 0;
     width: 50px;
     height: 50px;
     display: block;
     position: absolute;
     border: 2px solid black;
+    color: white;
+    line-height: 50px;
+    /*background-image: url(assets/images/boxTextura.png);*/
+
 }
-.cube .front  { background-color: rgba(225, 207, 113, 0.75) }
-.cube .back   { background-color: rgba(225, 160, 88, 0.75)  }
-.cube .right  { background-color: rgba(225, 160, 88, 0.75)  }
-.cube .left   { background-color: rgba(110, 225, 224, 0.75) }
-.cube .top    { background-color: rgba(144, 67, 225, 0.75)  }
-.cube .bottom { background-color: rgba(225, 78, 93, 0.75)   }
+.cube .front  { background-color: rgba(225, 207, 113, 1) }
+.cube .back   { background-color: rgba(225, 160, 88, 1)  }
+.cube .right  { background-color: rgba(225, 160, 88, 1)  }
+.cube .left   { background-color: rgba(110, 225, 224, 1) }
+.cube .top    { background-color: rgba(144, 67, 225, 1)  }
+.cube .bottom { background-color: rgba(225, 78, 93, 1)   }
 
 .cube .front  { transform: rotateY(   0deg ) translateZ( 25px ); }
 .cube .back   { transform: rotateX( 180deg ) translateZ( 25px ); }
@@ -64,5 +104,9 @@
 .cube.show-top    { transform: translateZ( -25px ) rotateX(  -90deg ); }
 .cube.show-bottom { transform: translateZ( -25px ) rotateX(   90deg ); }
 
-.cube { transition: background-color,transform 1s; }
-.cube { transform: translateZ( -25px ); }
+.cube.no-color .front { background-color: transparent;}
+.cube.no-color .back  { background-color: transparent;}
+.cube.no-color .right { background-color: transparent;}
+.cube.no-color .left  { background-color: transparent;}
+.cube.no-color .top   { background-color: transparent;}
+.cube.no-color .bottom{ background-color: transparent;}
