@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>Enigma 2 :)</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="enigma2.css">
+    <link rel="stylesheet" href="enigma2.style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg.js"></script>
+    <script src="utils.js"></script>
     <style>
 
 
@@ -29,17 +30,25 @@
             shuffle( $$('#container')[0] );
             collection = $$('#container .cube');
 
+            $('.cube').on('mouseover', function (evt) {
+                collection[this.dataset.note-1].classList.add('show-note')
+            });
+            $('.cube').on('mouseout', function (evt) {
+                collection[this.dataset.note-1].classList.remove('show-note');
+            });
+            $('.cube').on('click', function (evt) {
+                collection[this.dataset.note-1].classList.add('show-note-fixed')
+                this.classList.add('show-note-fixed')
+            });
+
             state.findedNumber = (Math.random()* collection.length) | 0;
             renderState();
 
-            $('.cube').on('click', function () {
-//                markNext.call(this);
-//                state.step++;
-//                renderState();
+          /*  $('.cube').on('click', function () {
                 this.classList.add('marked');
                 swapCube(this)
 
-            });
+            });*/
 
 //            $('#container div').on('mouseenter',function point(me){
 //                var num = this.innerText * 1;
@@ -51,35 +60,38 @@
         function createCubes(){
             var len = 100;
             var cubes =[];
-            for (var i = 0; i < len; i++) {
+            for (var note = 1; note < len+1; note++) {
                 cubes.push(
-                    $('<div class="cube show-front">\
+                    $('<div class="cube" data-note="'+note+'">\
                         <figure class="front"></figure>\
                         <figure class="back"></figure>\
                         <figure class="right"></figure>\
                         <figure class="left"></figure>\
                         <figure class="top"></figure>\
                         <figure class="bottom"></figure>\
-                        <span>'+(i+1)+'</span>\
+                        <span class="note"> '+note+' </span>\
+                        <span class="order"></span>\
                     </div>')
-                )
+                );
             }
 
             $('#container').append(cubes);
         }
 
-
         function circle(color, indexStart ){
             var index = indexStart;
             var $circle = $('<div class="circle">');
-            var path = [];
+//            var path = [];
+            var order = 1;
             while(true){
                 var node = collection[ index ];
 //                node.classList.add('marked');
                 node.classList.add('touched');
                 node.style.backgroundColor = color;
-                index = (node.innerText * 1) -1;
-                path.push( index );
+                node.querySelector('.order').innerText = order+'';
+                order ++;
+                index = (node.querySelector('.note').innerText * 1) -1;
+//                path.push( index );
                 $circle.append( node.cloneNode(true) );
                 if(index == indexStart){
                     break;
@@ -87,36 +99,20 @@
             }
             $('#circles').append( '<h1>'+ $circle.children().length  +" steps</h1>" );
             $('#circles').append( $circle );
-            const cubeSize = 50;
-            path = path
-                    .map(indexToCoordinate.bind(null,cubeSize))
-                    .join('')
-                    .replace('L','M');
-            Snap('#container + svg').path( path).attr({
+
+            var path = $circle.text().replace(/\s+/g,' ').trim();
+            Snap('svg').path( utils.buildPathString(path)).attr({
                 stroke: color
             });
-
-        }
-
-        function indexToCoordinate( cubeSize, index){
-            const lineLength = 10 ;
-            const d = cubeSize / 2;
-            var c = {
-                x: (index % lineLength) * cubeSize,
-                y: (index / lineLength | 0) * cubeSize
-            };
-
-            return  ['L',c.x + d, c.y + d].join(' ');
-
         }
 
         function markCircles(){
             for (var i = 0; i < collection.length; i++) {
                 if(collection[i].classList.contains("touched"))
                     continue;
-                var color = randomColor();
+                var color = utils.randomColor();
                 circle(color,i);
-                break;
+//                break;
 
             }
         }
@@ -141,15 +137,7 @@
         }
 
 
-        function randomColor() {
-//            var letters = '0123456789ABCDEF'.split('');
-            var letters = '23456789ABC'.split('');
-            var color = '#';
-            for (var i = 0; i < 3; i++ ) {
-                color += letters[Math.random() * letters.length | 0];
-            }
-            return color;
-        }
+
 
         function shuffle( container ){
             for (var i = container.children.length; i >= 0; i--) {
@@ -175,8 +163,8 @@
 </head>
 <body>
     <div id="stage">
-        <div id="container"></div>
-        <svg></svg>
+        <svg width="100%" height="100%" viewBox="0 0 100% 100%"></svg>
+        <div id="container" class="show-front"></div>
     </div>
 
 

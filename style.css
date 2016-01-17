@@ -10,7 +10,7 @@ body{
 #container{
     overflow: hidden;
     display: inline-block;
-    background-color: darkcyan;
+    /*background-color: darkcyan;*/
 }
 
 .cube{
